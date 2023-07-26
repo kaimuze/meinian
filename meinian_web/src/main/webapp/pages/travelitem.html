@@ -232,15 +232,45 @@
                 },
                 //添加
                 handleAdd () {
+                    // 表单数据校验
+                    this.$refs['dataAddForm'].validate((valid)=>{
+                        if (valid){
+                            // ajax提交表单数据
+                            axios.post("/TravelItem/add.do",this.formData).then((resp)=>{
+                                if (resp.data.flag){  // data == Result(controller返回的结果对象)
+                                    this.dialogFormVisible = false
+                                    this.$message.success(resp.data.message)
+                                    // 分页查询 显示最新数据
+                                    this.findPage()
+                                }else {
+                                    this.$message.error(resp.data.message)
+                                }
+                            }).catch((e)=>{
+                                this.$message.error("自由行提交表单数据操作失败")
+                            }).finally(()=>{
+
+                            })
+                        }else {
+                            //数据校验失败
+                            this.$message.error("表单校验数据失败")
+                            return false
+                        }
+                    })
+                    // 提交表单
                 },
                 //分页查询
                 findPage() {
                 },
                 // 重置表单
                 resetForm() {
+                    this.formData = {}
                 },
                 // 弹出添加窗口
                 handleCreate() {
+                    // 重置表单
+                    this.resetForm()
+                    // 弹出表单窗口
+                    this.dialogFormVisible = true
                 },
                 // 弹出编辑窗口
                 handleUpdate(row) {
