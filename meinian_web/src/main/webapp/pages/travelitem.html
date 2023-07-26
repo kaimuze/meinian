@@ -225,6 +225,8 @@
             },
             //钩子函数，VUE对象初始化完成后自动执行
             created() {
+                // 调用分页方法
+                this.findPage()
             },
             methods: {
                 //编辑
@@ -260,6 +262,17 @@
                 },
                 //分页查询
                 findPage() {
+                    //分页请求餐朱
+                    var param = {
+                        currentPage:this.pagination.currentPage,
+                        pageSize:this.pagination.pageSize,
+                        queryString:this.pagination.queryString,
+                    }
+                    //发起异步请求
+                    axios.post("/TravelItem/findPage.do",param).then((resp)=>{
+                        this.pagination.total = resp.data.total
+                        this.dataList = resp.data.rows
+                    }).catch().finally()
                 },
                 // 重置表单
                 resetForm() {
@@ -277,6 +290,8 @@
                 },
                 //切换页码
                 handleCurrentChange(currentPage) {
+                    this.pagination.currentPage = currentPage
+                    this.findPage()
                 },
                 // 删除
                 handleDelete(row) {

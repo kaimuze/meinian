@@ -3,8 +3,18 @@
 <mapper namespace="com.atguigu.dao.TravelItemDao">
 
     <insert id="addTravelItem" parameterType="com.atguigu.pojo.TravelItem">
-            insert into t_travelitem(code,name,sex,age,price,type,remark,attention)
-            values (#{code}, #{name}, #{sex}, #{age}, #{price}, #{type}, #{remark}, #{attention})
+        insert into t_travelitem(code, name, sex, age, price, type, remark, attention)
+        values (#{code}, #{name}, #{sex}, #{age}, #{price}, #{type}, #{remark}, #{attention})
     </insert>
+
+
+    <select id="findPage" resultType="com.atguigu.pojo.TravelItem" parameterType="string">
+        select * from t_travelitem
+        <where>
+            <if test="value!=null and value.length>0">
+                code = #{value} or name like concat('%',#{value},'%')
+            </if>
+        </where>
+    </select>
 
 </mapper>
